@@ -43,9 +43,11 @@ class TripServiceTest {
     void should_not_return_any_trips_when_users_are_not_friends() {
         // given
         loggedInUser = REGISTERED_USER;
-        User user = new User();
-        user.addFriend(ANOTHER_USER);
-        user.addTrip(MONTREAL_TO_PARIS);
+
+        User user = UserBuilder.aUser()
+                .friendsWith(ANOTHER_USER)
+                .withTrips(MONTREAL_TO_PARIS)
+                .build();
 
         // when
         List<Trip> foundTrips = tripService.getTripsByUser(user);
@@ -58,11 +60,11 @@ class TripServiceTest {
     void should_return_friend_trips_when_users_are_friends() {
         // given
         loggedInUser = REGISTERED_USER;
-        User user = new User();
-        user.addFriend(ANOTHER_USER);
-        user.addFriend(REGISTERED_USER);
-        user.addTrip(MONTREAL_TO_PARIS);
-        user.addTrip(MONTREAL_TO_TORONTO);
+
+        User user = UserBuilder.aUser()
+                .withTrips(MONTREAL_TO_PARIS, MONTREAL_TO_TORONTO)
+                .friendsWith(ANOTHER_USER, REGISTERED_USER)
+                .build();
 
         // when
         List<Trip> foundTrips = tripService.getTripsByUser(user);
@@ -82,4 +84,5 @@ class TripServiceTest {
             return u.trips();
         }
     }
+
 }
