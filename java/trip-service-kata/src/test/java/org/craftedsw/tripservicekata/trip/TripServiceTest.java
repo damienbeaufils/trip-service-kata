@@ -33,7 +33,7 @@ class TripServiceTest {
         loggedInUser = ANONYMOUS_USER;
 
         // when
-        Throwable throwable = catchThrowable(() -> tripService.getTripsByUser(UNUSED_USER));
+        Throwable throwable = catchThrowable(() -> tripService.getTripsByUser(UNUSED_USER, loggedInUser));
 
         // then
         assertThat(throwable).isInstanceOf(UserNotLoggedInException.class);
@@ -50,7 +50,7 @@ class TripServiceTest {
                 .build();
 
         // when
-        List<Trip> foundTrips = tripService.getTripsByUser(user);
+        List<Trip> foundTrips = tripService.getTripsByUser(user, loggedInUser);
 
         // then
         assertThat(foundTrips).isEmpty();
@@ -67,17 +67,13 @@ class TripServiceTest {
                 .build();
 
         // when
-        List<Trip> foundTrips = tripService.getTripsByUser(user);
+        List<Trip> foundTrips = tripService.getTripsByUser(user, loggedInUser);
 
         // then
         assertThat(foundTrips).containsExactly(MONTREAL_TO_PARIS, MONTREAL_TO_TORONTO);
     }
 
     private class TestableTripService extends TripService {
-        @Override
-        User getLoggedInUser() {
-            return loggedInUser;
-        }
 
         @Override
         List<Trip> tripsBy(User u) {
