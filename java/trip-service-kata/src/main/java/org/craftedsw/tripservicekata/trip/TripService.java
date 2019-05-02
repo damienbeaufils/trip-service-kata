@@ -9,6 +9,16 @@ import static java.util.Collections.emptyList;
 
 public class TripService {
 
+	private final TripDAO tripDao;
+
+	public TripService() {
+		tripDao = new TripDAO();
+	}
+
+	public TripService(TripDAO tripDao) {
+		this.tripDao = tripDao;
+	}
+
 	/**
 	 * find trips of given user
 	 * @param user the user
@@ -22,13 +32,9 @@ public class TripService {
 		}
 
 		if (user.isFriendWith(loggedInUser)) {
-			return tripsBy(user);
+			return tripDao.tripsBy(user);
 		}
 		return emptyList();
-	}
-
-	List<Trip> tripsBy(User u) {
-		return TripDAO.findTripsByUser(u);
 	}
 
 }

@@ -7,8 +7,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class TripServiceTest {
 
@@ -20,11 +23,13 @@ class TripServiceTest {
     private static final Trip MONTREAL_TO_TORONTO = new Trip();
 
     private TripService tripService;
+    private TripDAO tripDao;
     private User loggedInUser;
 
     @BeforeEach
     void setUp() {
-        tripService = new TestableTripService();
+        tripDao = mock(TripDAO.class);
+        tripService = new TripService(tripDao);
     }
 
     @Test
@@ -61,10 +66,13 @@ class TripServiceTest {
         // given
         loggedInUser = REGISTERED_USER;
 
+        Trip[] trips = {MONTREAL_TO_PARIS, MONTREAL_TO_TORONTO};
         User user = UserBuilder.aUser()
-                .withTrips(MONTREAL_TO_PARIS, MONTREAL_TO_TORONTO)
+                .withTrips(trips)
                 .friendsWith(ANOTHER_USER, REGISTERED_USER)
                 .build();
+
+        when(tripDao.tripsBy(user)).thenReturn(asList(trips));
 
         // when
         List<Trip> foundTrips = tripService.getTripsByUser(user, loggedInUser);
@@ -72,13 +80,4 @@ class TripServiceTest {
         // then
         assertThat(foundTrips).containsExactly(MONTREAL_TO_PARIS, MONTREAL_TO_TORONTO);
     }
-
-    private class TestableTripService extends TripService {
-
-        @Override
-        List<Trip> tripsBy(User u) {
-            return u.trips();
-        }
-    }
-
 }
