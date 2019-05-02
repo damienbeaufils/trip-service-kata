@@ -11,25 +11,18 @@ public class TripService {
 
 	/**
 	 * find trips of given user
-	 * @param u the user
+	 * @param user the user
 	 * @return trips found
 	 * @throws UserNotLoggedInException
 	 */
-	public List<Trip> getTripsByUser(User u) throws UserNotLoggedInException {
-		List<Trip> res = new ArrayList<Trip>();
-		User logged = getLoggedInUser();
-		boolean f = false;
-		if (logged != null) {
-			for (User u1 : u.getFriends()) {
-				if (u1.equals(logged)) {
-					f = true;
-					break;
-				}
+	public List<Trip> getTripsByUser(User user) throws UserNotLoggedInException {
+		List<Trip> foundTrips = new ArrayList<Trip>();
+		User loggedInUser = getLoggedInUser();
+		if (loggedInUser != null) {
+			if (user.isFriendWith(loggedInUser)) {
+				foundTrips = tripsBy(user);
 			}
-			if (f) {
-				res = tripsBy(u);
-			}
-			return res;
+			return foundTrips;
 		} else {
 			throw new UserNotLoggedInException();
 		}

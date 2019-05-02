@@ -4,9 +4,9 @@ import org.craftedsw.tripservicekata.user.User;
 
 import java.util.Arrays;
 
-class UserBuilder {
-    private Trip[] trips;
-    private User[] friends;
+public class UserBuilder {
+    private Trip[] trips = new Trip[]{};
+    private User[] friends = new User[]{};
 
     public static UserBuilder aUser() {
         return new UserBuilder();
