@@ -12,27 +12,20 @@ public class TripService {
 	private final TripDAO tripDao;
 
 	public TripService() {
-		tripDao = new TripDAO();
+		this(new TripDAO());
 	}
 
 	public TripService(TripDAO tripDao) {
 		this.tripDao = tripDao;
 	}
 
-	/**
-	 * find trips of given user
-	 * @param user the user
-	 * @param loggedInUser
-	 * @return trips found
-	 * @throws UserNotLoggedInException
-	 */
-	public List<Trip> getTripsByUser(User user, User loggedInUser) throws UserNotLoggedInException {
+	public List<Trip> getFriendTrips(User loggedInUser, User friend) throws UserNotLoggedInException {
 		if (loggedInUser == null) {
 			throw new UserNotLoggedInException();
 		}
 
-		if (user.isFriendWith(loggedInUser)) {
-			return tripDao.tripsBy(user);
+		if (friend.isFriendWith(loggedInUser)) {
+			return tripDao.tripsBy(friend);
 		}
 		return emptyList();
 	}

@@ -30,6 +30,8 @@ class TripServiceTest {
     void setUp() {
         tripDao = mock(TripDAO.class);
         tripService = new TripService(tripDao);
+
+        loggedInUser = REGISTERED_USER;
     }
 
     @Test
@@ -38,7 +40,7 @@ class TripServiceTest {
         loggedInUser = ANONYMOUS_USER;
 
         // when
-        Throwable throwable = catchThrowable(() -> tripService.getTripsByUser(UNUSED_USER, loggedInUser));
+        Throwable throwable = catchThrowable(() -> tripService.getFriendTrips(loggedInUser, UNUSED_USER));
 
         // then
         assertThat(throwable).isInstanceOf(UserNotLoggedInException.class);
@@ -47,15 +49,13 @@ class TripServiceTest {
     @Test
     void should_not_return_any_trips_when_users_are_not_friends() {
         // given
-        loggedInUser = REGISTERED_USER;
-
         User user = UserBuilder.aUser()
                 .friendsWith(ANOTHER_USER)
                 .withTrips(MONTREAL_TO_PARIS)
                 .build();
 
         // when
-        List<Trip> foundTrips = tripService.getTripsByUser(user, loggedInUser);
+        List<Trip> foundTrips = tripService.getFriendTrips(loggedInUser, user);
 
         // then
         assertThat(foundTrips).isEmpty();
@@ -64,8 +64,6 @@ class TripServiceTest {
     @Test
     void should_return_friend_trips_when_users_are_friends() {
         // given
-        loggedInUser = REGISTERED_USER;
-
         Trip[] trips = {MONTREAL_TO_PARIS, MONTREAL_TO_TORONTO};
         User user = UserBuilder.aUser()
                 .withTrips(trips)
@@ -75,7 +73,7 @@ class TripServiceTest {
         when(tripDao.tripsBy(user)).thenReturn(asList(trips));
 
         // when
-        List<Trip> foundTrips = tripService.getTripsByUser(user, loggedInUser);
+        List<Trip> foundTrips = tripService.getFriendTrips(loggedInUser, user);
 
         // then
         assertThat(foundTrips).containsExactly(MONTREAL_TO_PARIS, MONTREAL_TO_TORONTO);
