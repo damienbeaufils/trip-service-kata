@@ -15,7 +15,7 @@ public class HttpSession {
 
 	public User getLoggedUser() {
 		throw new CollaboratorCallException(
-				"UserSession.getLoggedUser() should not be called in an unit test");
+				"HttpSession should not be used in an unit test: it may have a dependency on a web context or on a database for instance");
 	}
 
 }
