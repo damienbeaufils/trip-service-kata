@@ -1,8 +1,9 @@
 package org.craftedsw.tripservicekata.trip;
 
+import org.craftedsw.tripservicekata.database.TripDAO;
 import org.craftedsw.tripservicekata.exception.UserNotLoggedInException;
-import org.craftedsw.tripservicekata.user.HttpSession;
 import org.craftedsw.tripservicekata.user.User;
+import org.craftedsw.tripservicekata.web.HttpSession;
 
 import java.util.ArrayList;
 import java.util.List;

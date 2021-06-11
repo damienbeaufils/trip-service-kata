@@ -1,6 +1,7 @@
-package org.craftedsw.tripservicekata.user;
+package org.craftedsw.tripservicekata.web;
 
 import org.craftedsw.tripservicekata.exception.CollaboratorCallException;
+import org.craftedsw.tripservicekata.user.User;
 
 public class HttpSession {
 
