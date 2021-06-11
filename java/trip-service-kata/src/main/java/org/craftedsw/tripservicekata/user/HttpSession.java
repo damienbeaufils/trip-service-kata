@@ -2,14 +2,14 @@ package org.craftedsw.tripservicekata.user;
 
 import org.craftedsw.tripservicekata.exception.CollaboratorCallException;
 
-public class UserSession {
+public class HttpSession {
 
-	private static final UserSession userSession = new UserSession();
+	private static final HttpSession userSession = new HttpSession();
 	
-	private UserSession() {
+	private HttpSession() {
 	}
 	
-	public static UserSession getInstance() {
+	public static HttpSession getInstance() {
 		return userSession;
 	}
 
